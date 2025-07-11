@@ -112,7 +112,7 @@ int insereHashTable(HashTable* ha, Node *no){
 }
 
 //==============================================
-// Insere e busca com tratamento de colis�o: Endere�amento Aberto
+// Insere e busca com tratamento de colisão: Endereçamento Aberto
 //==============================================
 int sondagemLinear(int pos, int i, int TABLE_SIZE){
     return ((pos + i) & 0x7FFFFFFF) % TABLE_SIZE;
