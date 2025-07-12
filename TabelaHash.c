@@ -4,24 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct{
-    char* key;
-    Node *next;
-}Node;
-
-typedef struct{
-    Node *root;
-    int qtd;
-}LinkedList;
-
-//Defini��o do tipo Hash
-
-typedef struct{
-    int qtd;
-    int TABLE_SIZE;
-    Node **lists;  // array de ponteiros para o início de cada lista ligada
-} HashTable;
+#include "TabelaHash.h"
 
 HashTable* criaHashTable(int TABLE_SIZE){
     HashTable* ha = (HashTable*) malloc(sizeof(HashTable));
@@ -84,7 +67,7 @@ int chaveDobra(int chave, int TABLE_SIZE){
 }
 
 //==============================================
-//HashTable Multiplica��o
+//HashTable Multiplicão
 //int chave = valorString(nome);
 //pos = chaveDobra(chave, TABLE_SIZE)
 int chaveMultiplicacao(int chave, int TABLE_SIZE){
@@ -98,11 +81,11 @@ int chaveMultiplicacao(int chave, int TABLE_SIZE){
 // Insere e busca sem tratamento de colis�o
 //==============================================
 int insereHashTable(HashTable* ha, Node *no){
-    if(ha == NULL || ha->qtd == ha->TABLE_SIZE || no = NULL)
+    if(ha == NULL || no == NULL)
         return 0;
 
-    int chave = no->key;
-    int pos = chaveDivisao(chave,ha->TABLE_SIZE);
+    int chave = valorString(no->key);
+    int pos = chaveDivisao(chave, ha->TABLE_SIZE);
 
     // Insere no início da lista
     no->next = ha->lists[pos];
@@ -128,15 +111,18 @@ int duploHashTable(int H1, int chave, int i, int TABLE_SIZE){
     return ((H1 + i*H2) & 0x7FFFFFFF) % TABLE_SIZE;
 }
 
-Node* buscaHashTable(HashTable* ha, Node no){
+Node* buscaHashTable(HashTable* ha, const char* key){
     if(ha == NULL)
         return 0;
 
-    int i, pos, newPos;
-    pos = chaveDivisao(no.key, ha->TABLE_SIZE);
+    int i, pos, newPos, chave;
+
+    chave = valorString((char*) key);
+    pos = chaveDivisao(chave, ha->TABLE_SIZE);
+
     Node* curr = ha->lists[pos];
     while (curr) {
-        if (curr->key == no.key) {
+        if (strcmp(curr->key, key) == 0) {
             return curr;
         }
         curr = curr->next;
