@@ -1,32 +1,21 @@
-//Potências de dois devem ser evitadas
-//deve ser um número primo distante de pequenas potências de dois
+#ifndef TABELAHASH_H
+#define TABELAHASH_H
 
-// Por enquando vai ser uma lista de IDs -> substituir por SET DE RRNs
-typedef struct IntList {
-    long offset;
-    struct IntList* next;
-} IntList;
+#include "Set.h"
 
-// Lista ligada para as chaves que derem colisão
+// Nós da lista ligada para as chaves que derem colisão
 typedef struct Node{
-    char* key;
-    IntList* ids;
+    char* key;      
+    Set* offsets;   // conjunto de endereços do arquivo onde a chave aparece
     struct Node *next;
 } Node;
 
-//Definição do tipo Hash
+// Definição do tipo Hash
 typedef struct HashTable{
     int qtd;
     int TABLE_SIZE;
-    Node **lists;  // array de ponteiros para o início de cada lista ligada
+    Node **lists;       // array de ponteiros para o início de cada lista ligada
 } HashTable;
-
-/*
-typedef struct{
-    Node *root;
-    int qtd;
-}LinkedList;
-*/
 
 HashTable* criaHashTable(int TABLE_SIZE);
 void liberaHash(HashTable* ha);
@@ -47,3 +36,5 @@ int sondagemLinear(int pos, int i, int TABLE_SIZE);
 int sondagemQuadratica(int pos, int i, int TABLE_SIZE);
 int duploHashing(int pos, int chave, int i, int TABLE_SIZE);
 */
+
+#endif // TABELAHASH_H
