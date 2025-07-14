@@ -28,8 +28,8 @@ void libera_NO(struct NO* no){
 void libera_ArvAVL(ArvAVL* raiz){
     if(raiz == NULL)
         return;
-    libera_NO(*raiz);//libera cada n�
-    free(raiz);//libera a raiz
+    libera_NO(*raiz);   //libera cada nó
+    free(raiz);     //libera a raiz
 }
 
 int altura_NO(struct NO* no){
@@ -131,7 +131,7 @@ int consulta_ArvAVL(ArvAVL *raiz, int valor){
 }
 
 //=================================
-void RotacaoLL(ArvAVL *A){//LL
+void RotacaoLL(ArvAVL *A){      // LL
     //printf("RotacaoLL\n");
     struct NO *B;
     B = (*A)->esq;
@@ -142,7 +142,7 @@ void RotacaoLL(ArvAVL *A){//LL
     *A = B;
 }
 
-void RotacaoRR(ArvAVL *A){//RR
+void RotacaoRR(ArvAVL *A){      // RR
     //printf("RotacaoRR\n");
     struct NO *B;
     B = (*A)->dir;
@@ -153,19 +153,19 @@ void RotacaoRR(ArvAVL *A){//RR
     (*A) = B;
 }
 
-void RotacaoLR(ArvAVL *A){//LR
+void RotacaoLR(ArvAVL *A){      // LR
     RotacaoRR(&(*A)->esq);
     RotacaoLL(A);
 }
 
-void RotacaoRL(ArvAVL *A){//RL
+void RotacaoRL(ArvAVL *A){      // RL
     RotacaoLL(&(*A)->dir);
     RotacaoRR(A);
 }
 
 int insere_ArvAVL(ArvAVL *raiz, int valor){
     int res;
-    if(*raiz == NULL){//�rvore vazia ou n� folha
+    if(*raiz == NULL){      // Árvore vazia ou nó folha
         struct NO *novo;
         novo = (struct NO*)malloc(sizeof(struct NO));
         if(novo == NULL)
@@ -223,8 +223,8 @@ struct NO* procuraMenor(struct NO* atual){
 }
 
 int remove_ArvAVL(ArvAVL *raiz, int valor){
-  if(*raiz == NULL){// valor n�o existe
-      //printf("valor n�o existe!!\n");
+  if(*raiz == NULL){        // valor não existe
+      //printf("valor não existe!!\n");
       return 0;
   }
 
@@ -252,14 +252,14 @@ int remove_ArvAVL(ArvAVL *raiz, int valor){
   }
 
   if((*raiz)->info == valor){
-      if(((*raiz)->esq == NULL || (*raiz)->dir == NULL)){// n� tem 1 filho ou nenhum
+      if(((*raiz)->esq == NULL || (*raiz)->dir == NULL)){       // nó tem 1 filho ou nenhum
       struct NO *oldNode = (*raiz);
       if((*raiz)->esq != NULL)
                 *raiz = (*raiz)->esq;
             else
                 *raiz = (*raiz)->dir;
       free(oldNode);
-    }else { // n� tem 2 filhos
+    }else {         // nó tem 2 filhos
       struct NO* temp = procuraMenor((*raiz)->dir);
       (*raiz)->info = temp->info;
       remove_ArvAVL(&(*raiz)->dir, (*raiz)->info);

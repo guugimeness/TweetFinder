@@ -1,5 +1,5 @@
 // Trabalho Final - ORI (2025/1)
-//   TweetFinder
+//          TweetFinder
 //
 // Gustavo de Oliveira Gimenes - 820759
 // Vinícius Marto da Veiga - 821252
@@ -15,7 +15,7 @@
 #include "Set.h"
 #include "Post.h"
 
-#define FILE_NAME "corpus-reduzido.csv"
+#define FILE_NAME "corpus.csv"
 #define MAX_QUERY_LEN 100
 #define MAX_WORD_LEN 100
 #define HASH_SIZE 10000
@@ -44,23 +44,23 @@ int main()
         {
             printf("\n             Bem-vindo ao Tweet Finder - seu buscador de tweets\n \
             Você pode digitar uma lista de palavras e será exibido todas as postagens que contém as palavras da lista.\n \
-            Você pode usar os operadores AND e OR para NOT para compor a sua busca.\n \
-            Você deve digitar a lista de palavras buscadas em minúsculo, e os operadores em maiúsculo.\n \
+            Você pode usar os operadores AND, OR e NOT para compor a sua busca.\n \
+            Você deve digitar as palavras buscadas em minúsculo, e os operadores em maiúsculo.\n \
             Exemplo: (usa AND NOT(winner)) OR (brazil AND carnaval)\n" );
             continue;
         }
 
         if (strcmp(query, "sair") == 0) break;
 
-        // Tokeniza a querry do usuário
+        // Tokeniza a query do usuário
         token tokens[MAX_QUERY_LEN];
         int n = tokeniza(query, tokens, MAX_QUERY_LEN);
 
         // Tokens que são palavras recebem seu set vindo da Hash
-        associaSetsAosTokens(tokens, n, Hash);
+        associa_sets_aos_tokens(tokens, n, Hash);
 
-        // Sets dos tokens sofrem as operações da querry
-        Set* resultado = avaliaExpressao(tokens, n);
+        // Sets dos tokens sofrem as operações da query
+        Set* resultado = avalia_expressao(tokens, n);
         
         imprime_resultados(resultado, FILE_NAME);
     }

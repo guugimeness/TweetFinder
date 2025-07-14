@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 #include "TabelaHash.h"
 
 #define MAX_POST_LEN 200
@@ -14,7 +15,7 @@
 typedef struct {
     int id;
     char content[MAX_POST_LEN];
-    long offset;
+    long offset;        // Posição do post no arquivo
 } Post;
 
 extern HashTable *Hash;
