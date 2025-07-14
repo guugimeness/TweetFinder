@@ -1,5 +1,7 @@
 #include "Post.h"
 
+#define TIME_LIMIT 5
+
 // Limpar pontuações e espaços no início e fim das postagens
 void limpa_post(char* str) {
     if (!str || *str == '\0') return;
@@ -32,10 +34,10 @@ void adiciona_offset(Node* node, long offset) {
 void processa_post(int index, char* content) {
     char* palavra = strtok(content, " ,.;!?()[]{}<>\"'\t\n\r");
     while (palavra) {
-        limpa_post(palavra);    // remove pontuação nas pontas
+        limpa_post(palavra);    // Remove pontuação nas pontas
 
         for (int i = 0; palavra[i]; i++)
-            palavra[i] = tolower(palavra[i]);       // normaliza para minúsculas
+            palavra[i] = tolower(palavra[i]);       // Normaliza para minúsculas
 
         if (strlen(palavra) > 0) {
             Node* existente = buscaHashTable(Hash, palavra);
@@ -54,7 +56,7 @@ void processa_post(int index, char* content) {
     }
 }
 
-// Carregar posts do arquivo
+// Carrega os posts do arquivo
 void carrega_posts(const char* filename) 
 {
     FILE* file = fopen(filename, "r");
@@ -65,8 +67,20 @@ void carrega_posts(const char* filename)
 
     char line[500];
     long offset = 0;
+    clock_t inicio = clock();
+
     while (fgets(line, sizeof(line), file))
     {
+
+        // Controle do tempo para processar o arquivo -> notificar o usuário
+        clock_t agora = clock();
+        double tempo_decorrido = (double)(agora - inicio) / CLOCKS_PER_SEC;
+
+        if (tempo_decorrido > TIME_LIMIT) {
+            printf("Processamento do arquivo está demorando mais do que o esperado.\nAguarde...\n");
+            inicio = agora;
+        }
+
         if (strstr(line, "docID,") != NULL) {
             offset = ftell(file);
             continue;   // Ignorar cabeçalho
@@ -96,6 +110,7 @@ void carrega_posts(const char* filename)
     fclose(file);
 }
 
+// Imprime as postagens do set resultante acessando o arquivo
 void imprime_resultados(Set* result, const char* filename) {
     FILE* file = fopen(filename, "r");
     if (!file) {

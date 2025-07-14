@@ -3,12 +3,12 @@
 #include "Set.h" 
 #include "ArvoreAVL.h"
 
-//Definição do tipo Set
+// Definição do tipo Set
 struct set{
     ArvAVL* arv;
     int qtd;
     struct iterator *iter;
-    int negacao; // 0 = sem negacao, 1 = com negacao
+    int negacao;    // 0 = sem negacao, 1 = com negacao
 };
 
 Set* criaSet(){
@@ -159,7 +159,7 @@ Set* interseccaoSet(Set* A, Set* B){
     return C;
 }
 
-//Codigos criados pelos alunos para o trabalho
+// Códigos criados pelos alunos para o trabalho
 
 void resolveNOT(Set* s){
     if(s == NULL)

@@ -8,8 +8,8 @@
 #define MAX_WORD_LEN 100
 
 int tokeniza(const char* entrada, token tokens[], int max_tokens) {
-    int i = 0; // índice do token
-    int j = 0; // índice da string
+    int i = 0;  // Índice do token
+    int j = 0;  // Índice da string
 
     while (entrada[j] != '\0' && i < max_tokens) {
         // Ignora espaços manualmente
@@ -26,7 +26,6 @@ int tokeniza(const char* entrada, token tokens[], int max_tokens) {
             i++; j++;
             continue;
         }
-
         if (entrada[j] == ')') {
             tokens[i].tipo = 2;
             tokens[i].palavra = NULL;
@@ -81,10 +80,10 @@ int tokeniza(const char* entrada, token tokens[], int max_tokens) {
             continue;
         }
     }
-    return i; // número de tokens
+    return i;   // número de tokens
 }
 
-int substituiPorResultado(token tokens[], int n, int start, int end, Set* resultado) {
+int substitui_por_resultado(token tokens[], int n, int start, int end, Set* resultado) {
     tokens[start].tipo = 0;
     tokens[start].palavra = NULL;
     tokens[start].set = resultado;
@@ -96,7 +95,7 @@ int substituiPorResultado(token tokens[], int n, int start, int end, Set* result
     return nova_n;
 }
 
-int achaParentesesMaisInterno(token tokens[], int n, int *start, int *end) {
+int acha_parenteses_mais_interno(token tokens[], int n, int *start, int *end) {
     int ultimo_abre = -1;
     for (int i = 0; i < n; i++) {
         if (tokens[i].tipo == 1) ultimo_abre = i;
@@ -109,7 +108,7 @@ int achaParentesesMaisInterno(token tokens[], int n, int *start, int *end) {
     return 0;
 }
 
-int temParenteses(token tokens[], int n) {
+int tem_parenteses(token tokens[], int n) {
     for (int i = 0; i < n; i++) {
         if (tokens[i].tipo == 1 || tokens[i].tipo == 2) {
             return 1;
@@ -118,20 +117,20 @@ int temParenteses(token tokens[], int n) {
     return 0;
 }
 
-Set* avaliaSemParenteses(token tokens[], int n) {
+Set* avalia_sem_parenteses(token tokens[], int n) {
     Set* resultado = NULL;
     int i = 0;
 
-    // inicializa resultado com o primeiro conjunto (pode ser palavra ou parêntese já substituído)
+    // Inicializa resultado com o primeiro conjunto (pode ser palavra ou parêntese já substituído)
     if (n > 0 && tokens[0].tipo == 0) {
         resultado = tokens[0].set;
         i = 1;
     }
 
-    // percorre os operadores restantes
+    // Percorre os operadores restantes
     while (i < n) {
         // AND ou AND NOT
-        if (tokens[i].tipo == 4) { // AND
+        if (tokens[i].tipo == 4) {      // AND
             if (i + 2 < n && tokens[i + 1].tipo == 3 && tokens[i + 2].tipo == 0) {
                 // A AND NOT B = A - B
                 resultado = diferencaSet(resultado, tokens[i + 2].set);
@@ -143,7 +142,7 @@ Set* avaliaSemParenteses(token tokens[], int n) {
             }
         }
         // OR ou OR NOT
-        else if (tokens[i].tipo == 5) { // OR
+        else if (tokens[i].tipo == 5) {     // OR
             if (i + 2 < n && tokens[i + 1].tipo == 3 && tokens[i + 2].tipo == 0) {
                 Set* uni = uniaoSet(resultado, tokens[i + 2].set);
                 resultado = diferencaSet(uni, tokens[i + 2].set);
@@ -162,22 +161,24 @@ Set* avaliaSemParenteses(token tokens[], int n) {
     return resultado;
 }
 
-Set* avaliaExpressao(token tokens[], int n) {
+// Avalia a query tokenizada e realiza as operações necessárias
+Set* avalia_expressao(token tokens[], int n) {
     int start, end;
-    while (temParenteses(tokens, n)) {
-        achaParentesesMaisInterno(tokens, n, &start, &end);
+    while (tem_parenteses(tokens, n)) {
+        acha_parenteses_mais_interno(tokens, n, &start, &end);
         int tamanho = end - start - 1;
-        Set* resultado = avaliaSemParenteses(tokens + start + 1, tamanho);
-        n = substituiPorResultado(tokens, n, start, end, resultado);
+        Set* resultado = avalia_sem_parenteses(tokens + start + 1, tamanho);
+        n = substitui_por_resultado(tokens, n, start, end, resultado);
     }
-    return avaliaSemParenteses(tokens, n);
+    return avalia_sem_parenteses(tokens, n);
 }
 
-void associaSetsAosTokens(token tokens[], int n, HashTable* hash) {
+// Associa o tokens que for palavraa ao seu set de ocorrências no arquivo
+void associa_sets_aos_tokens(token tokens[], int n, HashTable* hash) {
     for (int i = 0; i < n; i++) {
         if (tokens[i].tipo == 0 && tokens[i].palavra != NULL) {
             Node* no = buscaHashTable(hash, tokens[i].palavra);
-            tokens[i].set = no ? no->offsets : criaSet();   // vazio se não achou
+            tokens[i].set = no ? no->offsets : criaSet();       // Vazio se não achou
         }
     }
 }
